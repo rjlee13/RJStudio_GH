@@ -7,48 +7,25 @@ editor_options:
   chunk_output_type: console
 ---
 
-
-
-
-
-
-
-
-
-
 `vistributions`
 
-If you are studying, reviewing or teaching Statistics, 
-*visualizing/drawing* (statistical) Probability Distributions 
-can sometimes really help you understand~
-(I have an example in my Plots panel)
-
+If you are studying, reviewing or teaching Statistics, *visualizing/drawing* (statistical) Probability Distributions can sometimes really help you understand\~ (I have an example in my Plots panel)
 
 In this short video, I introduce a useful package `vistributions` that can visualize probability distributions very quickly & easily 😃
 
-If you want to read more about `vistributions`, check out:
-<https://github.com/rsquaredacademy/vistributions>
-
+If you want to read more about `vistributions`, check out: <https://github.com/rsquaredacademy/vistributions>
 
 Please 🌟PAUSE🌟 the video any time you want to study the code written. ≧◡≦
 
 ### First, what packages are needed?
+
 ```{r}
 library(tidyverse)      # I "always" use tidyverse 🚀
 library(vistributions)  # this is the FOCUS 
 ```
 
-
-
-
-
-
-
-
-
-
-
 ### Normal Distribution
+
 ```{r}
 # plotting our famous bell 🔔 curve :) 
 vistributions::vdist_normal_plot() +
@@ -69,12 +46,12 @@ vistributions::vdist_normal_perc(probs = 0.75,
                                  type = "upper") +
   theme_bw()
 
-# 75% both probability
+# 75% 'both' probability
 vistributions::vdist_normal_perc(probs = 0.75,
                                  type = "both") +
   theme_bw()
 
-# P(X<1)
+# P(X < 1)
 vistributions::vdist_normal_prob(perc = 1) +
   theme_bw()
 
@@ -83,43 +60,29 @@ vistributions::vdist_normal_prob(perc = c(-1.96, 1.96)) +
   theme_bw()
 ```
 
-
-
-
-
-
-
-
-
 ### Binomial Distribution
+
 ```{r}
 # Plotting with default n = 10, p = 0.3
 vistributions::vdist_binom_plot() +
   theme_bw()
 
-# change n & p
+# change n & p 
 vistributions::vdist_binom_plot(n = 7,
-                                p = 0.3) +
+                                p = 0.2) +
   theme_bw()
-# the leftmost bar is a bit less than 0.1
-# the leftmost bar is probability of failing all 7 trials
-# so it's calculation would be:
-0.7^7 # 0.0823543 , which is indeed a bit less than 0.1 ✅
+# the leftmost bar is about 0.2
+# the leftmost bar is probability of failing ALL 7 (= n) trials
+# so its calculation would be:
+(1 - 0.2)^7 # 0.2097152 , which is indeed about 0.2 ✅
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ### f & chi-square distributions
+
 I am just going to plot 2 distributions together :)
+
+I am using `gridExtra` package.
+
 ```{r}
 library(gridExtra) # package for drawing 2 distributions together
 
@@ -127,23 +90,8 @@ gridExtra::grid.arrange(vdist_f_plot() + theme_bw(),
                         vdist_chisquare_plot() + theme_bw())
 ```
 
-
-
-
-
-
-
-
-
 Alrighty, this is the end of `vistributions` video.
-I encourage you to explore this useful package~
 
-Hope you enjoyed it! 
-Thank you for watching ◎[▪‿▪]◎
+I encourage you to explore this useful package\~
 
-
-
-
-
-
-
+Hope you enjoyed it! Thank you for watching ◎[▪‿▪]◎
