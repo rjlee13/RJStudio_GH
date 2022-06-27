@@ -65,7 +65,7 @@ values
 pd.unique(values)
 pd.value_counts(values)
 # OR using Numpy
-np.unique(values, return_counts=True)
+np.unique(values, return_counts = True)
 
 
 # suppose I want 0 to represent apple; 1 orange
@@ -101,8 +101,8 @@ df = pd.DataFrame({'fruit': fruits,
                    'id': np.arange(N)})
 df
 
-# right now, fruit column is Python string objects
-df.dtypes # object
+# right now, fruit column is Python string 'objects'
+df.dtypes # object; NOT categorical
 
 
 # CONVERT 🔥 fruits column to categorical, using .astype('category')
@@ -131,7 +131,7 @@ df['fruit'].dtype # same as above
 # pandas.Categorical
 # =============================================================================
 
-# create pandas.Categorical 
+# use pandas.Categorical 
 my_category = pd.Categorical(['A', 'B', 'B', 'C', 'A'])
 my_category # Categories (3, object): ['A', 'B', 'C']
 
@@ -170,10 +170,11 @@ pd.Categorical.from_codes(encode, distinct_category)
 grade_category = ['A', 'B', 'C']
 encode = [0, 1, 1, 2, 0] # 0 -> A ; 1 -> B ; 2 -> C
 
-# now notice `ordered = True
+
+# now notice `ordered = True`
 grades = pd.Categorical.from_codes(encode, distinct_category,
-                          ordered = True)
-grades         # ['A' < 'B' < 'C']
+                                   ordered = True)
+grades         # ['A' < 'B' < 'C'] <- now we have an order
 
 
 # we can RE-order, using reorder_categories()
@@ -208,13 +209,13 @@ rand_int.max() # 99
 
 # generate quartile categories
 quartile = pd.qcut(rand_int, 4)
-quartile.dtype # we got an ordered Categorical type:
-# categories=[(-0.001, 25.0], (25.0, 49.0], (49.0, 74.25], (74.25, 99.0]], o
+quartile.dtype # we got ordered Categorical type:
+# categories=[(-0.001, 25.0], (25.0, 49.0], (49.0, 74.25], (74.25, 99.0]],
 # ordered=True
 
 
-# INSTEAD of getting exact quartile range, 
-# it may be easier to use: ['Q1', 'Q2', 'Q3', 'Q4']
+# INSTEAD of getting the exact quartile range, 
+# it may be convenient to use: ['Q1', 'Q2', 'Q3', 'Q4'] label
 quartile = pd.qcut(rand_int, 4,
                    labels = ['Q1', 'Q2', 'Q3', 'Q4'])
 quartile.dtype # now we see
@@ -253,7 +254,7 @@ good = bad.astype('category')
 good # Length: 10000000, dtype: category
 
 
-# Check memory usage difference! 
+# Check memory usage difference! 🔥
 bad.memory_usage()  # 80000128
 good.memory_usage() # 10000332
 
@@ -281,36 +282,37 @@ good.memory_usage() # 10000332
 # nice pandas series
 nice = pd.Series(['A','B','C','D'] * 2)
 
-# make it into category type
+# make it into category type, using astype()
 nice_cat = nice.astype('category')
 nice_cat # Categories (4, object): ['A', 'B', 'C', 'D']
 
 # cat.codes & cat.categories
-nice_cat.cat.codes       # 0 -> A , ... , 3 -> D
+nice_cat.cat.codes       # A -> 0 , ... , D -> 3
 nice_cat.cat.categories  # ['A', 'B', 'C', 'D']
 
 
+#----
 
 
-# let's say that there is SUPPOSED to be 'E' category 
+# let's say that there is SUPPOSED to be an 'E' category 
 # even though there is NO data belonging to 'E' category
 nice_cat_E = nice_cat.cat.set_categories(['A','B','C','D','E'])
 nice_cat_E # we see Categories (5, object): ['A', 'B', 'C', 'D', 'E']
-           # even though we don't have E data
+           # even though we don't have any E data
 
 # notice the difference
-nice_cat.value_counts()
-nice_cat_E.value_counts() # 'E' category shows up!
+nice_cat.value_counts()   # NO 'E' category
+nice_cat_E.value_counts() # 'E' category shows up with 0 count!
 
 
+#----
 
 
-
-# let's say I only want categories 'A' & 'B'
+# let's say I ONLY want categories 'A' & 'B'
 nice_cat_AB = nice_cat[nice_cat.isin(['A','B'])]
 nice_cat_AB # notice there STILL are 'C' & 'D' categories
 
-# to completely get rid of 'C' & 'D' categories
+# to completely DISCARD 'C' & 'D' categories
 # use cat.remove_unused_categories()
 nice_cat_AB.cat.remove_unused_categories()
 # now 'C' & 'D' categories gone!
@@ -321,9 +323,34 @@ nice_cat_AB.cat.remove_unused_categories()
 
 
 
+
+
 # =============================================================================
-# Dummy variable
+# One-hot encoding
+# categorical variable -> dummy variable
 # =============================================================================
+
+'''
+this technique involes creating a DataFrame
+with a column for each distinct category - from textbook
+
+also this technique is frequently used in Deep Learning algorithms
+'''
+
+grade_cat = pd.Series(['A', 'B', 'C', 'D'] * 2,
+                      dtype = 'category')
+grade_cat # Categories (4, object): ['A', 'B', 'C', 'D']
+
+
+# One-hot encode
+pd.get_dummies(grade_cat)
+
+
+
+
+
+
+
 
 
 
