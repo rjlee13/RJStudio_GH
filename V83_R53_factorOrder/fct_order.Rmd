@@ -5,59 +5,47 @@ date: '2022-06-29'
 output: html_document
 editor_options: 
   chunk_output_type: console
+  markdown: 
+    wrap: 72
 ---
-
-
-
-
-
-
 
 `factor order`
 
+Sometimes it is easier to see the overall pattern when information is
+displayed in some "logical" order.
 
-Sometimes it is easier to see the overall pattern
-when information is written in some kind of logical "order".
+If you see my simple example in Plots panel, it is easier to see that
 
-If you see my simple example in Plots panel,
-it is easier to see that *C has the highest frequency*, and *H lowest*
-with the RIGHT plot than the LEFT plot.
+***C has the highest frequency***, and ***H lowest*** with the RIGHT
+plot than the LEFT plot.
 
-In this short video, I am going to show you how to visualize
-**factors in order** 🔥
+In this short video, I am going to show you how to **RE-ORDER factors**
+and visualize them 🔥
 
-A lot of explanation I use in this video is from a book titled, 
-"R for Data Science" 
+A lot of explanation I use in this video is from a book titled, "R for
+Data Science"
 
-
-Please 🌟PAUSE🌟 the video any time you want to study the code written. ≧◡≦
+Please 🌟PAUSE🌟 the video any time you want to study the code written.
+≧◡≦
 
 ### First, what package/s are needed?
+
 ```{r}
 library(tidyverse) # this is ALL we need!
 ```
 
-
-
-
-
-
-
-
-
-
-
-
 ### `fct_reorder()`
+
 ```{r}
 # consider the following made-up data I created
 madeup_data <- tibble(
   name  = factor(c("A", "B", "C", "D", "E", "F", "G", "H")),
   freq =         c(32,  12,  48,  23,  20,  19,  37,  8)
 )
-madeup_data %>% View # let's see the data
+# let's see the data
+madeup_data %>% View 
 madeup_data %>% 
-  glimpse() # name is factor ; score is double
+  glimpse() # name is factor ; freq is double
 
 
 # now let's generate a scatter plot, using geom_point()
@@ -70,23 +58,18 @@ madeup_data %>%
   labs(title = "Difficult to interpret the relation of names")
 
 
-# let's RE-ORDER name using its freq value, using fct_reorder()
+# let's RE-ORDER name using its freq value with fct_reorder()
 madeup_data %>% 
   ggplot(aes(x = freq, 
-             y = fct_reorder(name, freq))) +  #RE-ORDER
+             y = fct_reorder(name, freq))) +  # RE-ORDER
   geom_point(shape = 15,
              size  = 5) +
   theme_bw() +
   labs(title = "Easier to interpret after RE-ORDER :D")
 ```
 
-
-
-
-
-
-
 ### `fct_infreq()` & `fct_rev()`
+
 ```{r}
 # consider another made up data:
 madeup_data1 <- tibble(
@@ -94,7 +77,8 @@ madeup_data1 <- tibble(
                    "B", "B", "B",
                    "C", "C", "C", "C", "C", "C", "C",
                    "D")))
-madeup_data1 %>% View # let's see the data
+# let's see the data
+madeup_data1 %>% View 
 madeup_data1 %>% 
   glimpse() # Again, name is factor
 
@@ -114,37 +98,23 @@ madeup_data1 %>%
   labs(title = "RE-ORDERED :D")
 
 
-# RE-ORDER in reverse direction compared to above
+# RE-ORDER in REVERSE direction compared to above
 madeup_data1 %>% 
   ggplot(aes(x = name %>% fct_infreq() %>% 
-               fct_rev())) + # reverse order!
+               fct_rev())) + # REVERSE order!
   geom_bar() +
   theme_bw() +
-  labs(title = "in order :D")
+  labs(title = "REVERSE order :D")
 ```
-
-
-
 
 Alrighty, this is the end of `factor order` video.
 
-Hope you enjoyed it! 
+Hope you enjoyed it!
+
 Thank you for watching ◎[▪‿▪]◎
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### Visualization in the beginning....
+
 ```{r}
 # library(gridExtra)
 
@@ -169,7 +139,3 @@ b <- madeup_data %>%
   labs(title = "Easy to interpret",
        subtitle = "RIGHT plot")
 ```
-
-
-
-
