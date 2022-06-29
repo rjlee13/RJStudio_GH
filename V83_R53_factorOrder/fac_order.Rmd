@@ -1,0 +1,101 @@
+---
+title: "fact_order"
+author: "RJ"
+date: '2022-06-29'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+`factor order`
+
+
+
+Please 🌟PAUSE🌟 the video any time you want to study the code written. ≧◡≦
+
+### First, what packages are needed?
+```{r}
+library(tidyverse)
+```
+
+
+
+
+
+
+### Made-up Data 
+```{r}
+madeup_data <- tibble(
+  name  = factor(c("A", "B", "C", "D", "E", "F", "G", "H")),
+  freq =         c(32,  12,  48,  23,  20,  19,  37,  8)
+)
+
+
+madeup_data
+madeup_data %>% 
+  glimpse() # name is factor ; score is double
+```
+
+
+
+```{r}
+madeup_data %>% 
+  ggplot(aes(x = freq, 
+             y = name)) + 
+  geom_point(shape = 15,
+             size  = 5) +
+  theme_bw() +
+  labs(title = "NOT in order")
+
+
+
+
+madeup_data %>% 
+  ggplot(aes(x = freq, 
+             y = fct_reorder(name, freq))) + 
+  geom_point(shape = 15,
+             size  = 5) +
+  theme_bw() +
+  labs(title = "in order :D")
+```
+
+
+
+
+
+
+
+
+```{r}
+madeup_data1 <- tibble(
+  name  = factor(c("A", "A", "A", "A", "A", 
+                   "B", "B", "B",
+                   "C", "C", "C", "C", "C", "C", "C",
+                   "D")))
+
+madeup_data1 %>% 
+  ggplot(aes(x = name)) + 
+  geom_bar() +
+  theme_bw() +
+  labs(title = "NOT in order")
+
+
+madeup_data1 %>% 
+  ggplot(aes(x = fct_infreq(name))) + 
+  geom_bar() +
+  theme_bw() +
+  labs(title = "in order :D")
+
+
+madeup_data1 %>% 
+  ggplot(aes(x = name %>% fct_infreq() %>% fct_rev())) +
+  geom_bar() +
+  theme_bw() +
+  labs(title = "in order :D")
+```
+
+
+
