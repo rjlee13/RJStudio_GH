@@ -70,7 +70,6 @@ df2 = pd.DataFrame({'data1': np.arange(6),
                     'data2': np.arange(6)*10,
                     'key1' : ['a','b','a','b','a','b'],
                     'key2' : ['c','c','c','d','d','d']})
-
 df2
 
 df2.groupby(by = 'key1').mean()
@@ -86,12 +85,26 @@ df2.groupby(by = 'key1').data2.mean()
 
 
 
+# =============================================================================
+# GroupBy object
+# =============================================================================
+
+df2
+df2_group_key2 = df2.groupby(by = 'key2')
+df2_group_key2.mean()
+df2_group_key2.describe()
+
+
 
 
 # =============================================================================
 # Data Aggregation
 # =============================================================================
 
+df2
+df2.groupby(by = 'key2').mean()
+df2.groupby(by = 'key2').count()
+df2.groupby(by = 'key2').agg(['count','mean'])
 
 
 
