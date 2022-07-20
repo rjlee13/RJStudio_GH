@@ -1,0 +1,187 @@
+---
+title: "sql_freqTable"
+author: "RJ"
+date: '2022-07-17'
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+SQL Frequency Count
+
+
+When querying a database,
+sometimes you want to see the *frequency count* of different values
+appearing in a column / feature, like the Console output 👉
+
+
+I want to show you 2 useful SQL frequency count techniques:
+  1) SQL CASE  (used in Console example)
+  2) SQL NTILE
+
+In this video, I am going to use `sqldf::sqldf()`,
+which allows us to query datasets using SQL queries. 🚀
+
+
+Please 🌟PAUSE🌟 the video any time you want to study the code written. ≧◡≦
+
+### First, let me "clean up" IRIS data using `janitor::clean_names()`
+```{r}
+library(janitor)
+iris <- iris |> clean_names()
+# janitor::clean_names() was explained in a previous video~
+
+# check iris data
+iris |> head(5)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+### Warm up 🔥
+Simple SQL queries to remind us about the famous IRIS dataset
+```{r}
+# select ALL columns/features to see entire data
+sqldf::sqldf("SELECT * FROM iris")
+
+# IRIS is a famous dataset that contains 3 unique species
+sqldf::sqldf("SELECT COUNT(DISTINCT species) AS Unique_Species
+             FROM iris")
+
+# Frequency count of the 3 unique species: 50 each
+sqldf::sqldf("SELECT species AS specie, COUNT(*) AS frequency
+             FROM iris
+             GROUP BY Species")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+### SQL CASE
+Suppose I want to query something similar to this:
+
+How many samples' `petal_length` are LONGER than x and SHORTER than y, where x < y ?
+
+```{r}
+# using R first ...
+# number of samples with petal_length 1.9 or shorter
+iris$petal_length[iris$petal_length <= 1.9] |> length() # 50
+# number of samples whose petal_length longer than 5
+iris$petal_length[iris$petal_length > 5]    |> length() # 42
+
+
+# use SQL CASE to get the same information from database:
+sqldf::sqldf("SELECT 
+        CASE
+          WHEN petal_length <= 1.9 THEN 'short'
+          WHEN petal_length BETWEEN 2 AND 5 THEN 'medium'
+          ELSE 'long' 
+        END as LengthCategory, COUNT(*)
+      FROM iris 
+      GROUP BY 1
+      ORDER BY 1 DESC") 
+# short: when petal_length is 1.9 or shorter
+# long : when petal_length is longer than 5
+
+# note that "GROUP BY 1" means group by the FIRST column 
+# Please PAUSE to understand / read SQL query :) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+### SQL NTILE
+Suppose I want to create a few intervals with EQUAL number of samples in each of them.
+
+There are 150 samples in IRIS, and I want to create 5 intervals so that 30 samples exist inside each interval (150 = 5 * 30).
+
+We can do it using `SQL NTILE`:
+```{r}
+# I want 5 intervals so I wrote `NTILE(5)`
+sqldf::sqldf("SELECT petal_length, 
+              NTILE(5) OVER (ORDER BY petal_length) AS ntile 
+              FROM iris")
+# notice the `ntile` column:
+  # for first  30 samples, ntile is 1
+  # for second 30 samples, ntile is 2
+  # ...
+  # for fifth  30 samples, ntile is 5
+
+
+# Find the interval boundary petal_lengths like this:
+sqldf::sqldf("SELECT ntile, MIN(petal_length), MAX(petal_length)
+             FROM (SELECT petal_length, 
+                   NTILE(5) OVER (ORDER BY petal_length) AS ntile 
+                   FROM iris) 
+             GROUP BY ntile")
+# for first 30 samples (ntile == 1), min is 1.0 & max is 1.5
+# for fifth 30 samples (ntile == 5), min is 5.4 & max is 6.9
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+Alrighty, this is the end of `SQL Frequency Count` video.
+
+Hope you enjoyed it! 
+Thank you for watching ◎[▪‿▪]◎
+
+
+
+
+
+
+
+
+
+
+
